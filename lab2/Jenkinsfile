@@ -4,46 +4,43 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Скачивание репозитория
-                git url: 'https://github.com/gordonan3/mlops_practice.git', branch: 'main'
+                git 'https://github.com/gordonan3/mlops_practice.git'
             }
         }
         stage('Install Dependencies') {
             steps {
-                // Установка зависимостей
                 sh 'pip3 install pandas scikit-learn numpy joblib'
+            }
+        }
+        stage('Prepare Environment') {
+            steps {
+                sh 'mkdir -p train test test_scaled train_scaled'
             }
         }
         stage('Fetch Data') {
             steps {
-                // Запуск скрипта для получения данных
                 sh 'python3 lab2/data_creation.py'
             }
         }
         stage('Preprocess Data') {
             steps {
-                // Запуск скрипта для обработки данных
-                sh 'python3 lab2/data_preprocessing.py'
+                sh 'python3 lab2/preprocess.py'
             }
         }
         stage('Train Model') {
             steps {
-                // Запуск скрипта для обучения модели
-                sh 'python3 lab2/model_preparation.py'
+                sh 'python3 lab2/train.py'
             }
         }
         stage('Test Model') {
             steps {
-                // Запуск скрипта для тестирования модели
-                sh 'python3 lab2/model_testing.py'
+                sh 'python3 lab2/test.py'
             }
         }
     }
-
     post {
         always {
-            // Архивирование артефактов
-            archiveArtifacts artifacts: 'lab2/**/*.csv, lab2/model.pkl', allowEmptyArchive: true
+            archiveArtifacts artifacts: '**/train/*.csv, **/test/*.csv, **/test_scaled/*.csv, **/train_scaled/*.csv', allowEmptyArchive: true
         }
     }
 }
