@@ -11,7 +11,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 // Установка зависимостей
-                sh 'pip3 install pandas scikit-learn numpy os joblib'
+                sh 'pip3 install pandas scikit-learn numpy joblib'
             }
         }
         stage('Fetch Data') {
