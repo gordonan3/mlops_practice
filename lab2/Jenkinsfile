@@ -1,18 +1,49 @@
-#!/bin/bash
+pipeline {
+    agent any
 
-# Устанавливаем флаг для остановки скрипта при ошибке
-set -e
+    stages {
+        stage('Checkout') {
+            steps {
+                // Скачивание репозитория
+                git url: 'https://github.com/gordonan3/mlops_practice.git', branch: 'main'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                // Установка зависимостей
+                sh 'pip3 install pandas scikit-learn numpy'
+            }
+        }
+        stage('Fetch Data') {
+            steps {
+                // Запуск скрипта для получения данных
+                sh 'python3 lab2/data_creation.py'
+            }
+        }
+        stage('Preprocess Data') {
+            steps {
+                // Запуск скрипта для обработки данных
+                sh 'python3 lab2/data_preprocessing.py'
+            }
+        }
+        stage('Train Model') {
+            steps {
+                // Запуск скрипта для обучения модели
+                sh 'python3 lab2/model_preparation.py'
+            }
+        }
+        stage('Test Model') {
+            steps {
+                // Запуск скрипта для тестирования модели
+                sh 'python3 lab2/model_testing.py'
+            }
+        }
+    }
 
-echo "Запуск data_creation.py"
-python3 data_creation.py
-
-echo "Запуск data_preprocessing.py"
-python3 data_preprocessing.py
-
-echo "Запуск model_preparation.py"
-python3 model_preparation.py
-
-echo "Запуск model_testing.py"
-python3 model_testing.py
-
-echo "Все скрипты успешно выполнены"
+    post {
+        always {
+            // Архивирование артефактов
+            archiveArtifacts artifacts: 'lab2/**/*.csv, lab2/model.pkl', allowEmptyArchive: true
+        }
+    }
+}
