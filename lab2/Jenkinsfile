@@ -24,17 +24,17 @@ pipeline {
         }
         stage('Preprocess Data') {
             steps {
-                sh 'python3 lab2/preprocess.py'
+                sh 'python3 lab2/data_preprocessing.py'
             }
         }
         stage('Train Model') {
             steps {
-                sh 'python3 lab2/train.py'
+                sh 'python3 lab2/model_preparation.py'
             }
         }
         stage('Test Model') {
             steps {
-                sh 'python3 lab2/test.py'
+                sh 'python3 lab2/model_testing.py'
             }
         }
     }
