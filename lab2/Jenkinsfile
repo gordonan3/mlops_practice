@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/gordonan3/mlops_practice.git'
+                git branch: 'main', url: 'https://github.com/gordonan3/mlops_practice.git'
             }
         }
         stage('Install Dependencies') {
