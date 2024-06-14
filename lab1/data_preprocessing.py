@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, LabelEncoder
+import joblib
 
 # Стандартизация числовых признаков
 scaler = StandardScaler()
@@ -29,6 +30,9 @@ for file in os.listdir(train_folder):
         train_target_cod_df.to_csv(f'train_scaled/train_target_cod_{i}.csv', index=False)
         i += 1
 
+# Сохранение обученного scaler и label encoder
+joblib.dump(scaler, 'scaler.joblib')
+joblib.dump(label_encoder, 'label_encoder.joblib')
 
 i = 0
 # Считываем и обрабатываем данные из папки test
